@@ -1,11 +1,10 @@
 package com.nttdata.estacionamento.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Parking {
+public class ParkingEntity {
     @Id
     private Long id;
     private Double valorHora;
@@ -15,8 +14,8 @@ public class Parking {
     private Double totalFaturamentoUtilitario;
 
 
-    public void darEntrada(Vehicle vehicle){}
-    public void darSaida(Vehicle vehicle){}
+    public void darEntrada(VehicleEntity vehicleEntity){}
+    public void darSaida(VehicleEntity vehicleEntity){}
     public void procurar(String placa){}
 
 

@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Vehicle {
+public class VehicleEntity {
     @Id
     private String placa;
     private Marca marca;
