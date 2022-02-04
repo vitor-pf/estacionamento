@@ -1,22 +1,27 @@
 package com.nttdata.estacionamento.controllers;
-
 import com.nttdata.estacionamento.entities.VehicleEntity;
+import com.nttdata.estacionamento.enums.Marca;
+import com.nttdata.estacionamento.repositories.CarRepository;
+import com.nttdata.estacionamento.repositories.VehicleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 @RestController
-@RequestMapping(value = "veiculos")
+@RequestMapping(value = "/veiculos")
 public class VehicleController {
+    @Autowired
+    VehicleRepository repository;
+
     @GetMapping
     public ResponseEntity<?> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable @Valid Long id){
-        return ResponseEntity.status(HttpStatus.OK).body("id ok");
+    @GetMapping("/{marca}")
+    public ResponseEntity<?> findById(@PathVariable @Valid Marca marca){
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findByMarca(marca));
     }
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid VehicleEntity entity){
