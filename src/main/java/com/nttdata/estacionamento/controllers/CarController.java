@@ -1,31 +1,37 @@
 package com.nttdata.estacionamento.controllers;
 import com.nttdata.estacionamento.entities.CarEntity;
 import com.nttdata.estacionamento.entities.ParkingEntity;
+import com.nttdata.estacionamento.repositories.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 @RestController
-@RequestMapping(value = "cars")
+@RequestMapping(value = "/carros")
 public class CarController {
+    @Autowired
+    CarRepository repository;
+
     @GetMapping
     public ResponseEntity<?> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable @Valid Long id){
-        return ResponseEntity.status(HttpStatus.OK).body("id ok");
+    @GetMapping("/{placa}")
+    public ResponseEntity<?> findById(@PathVariable @Valid String placa){
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findById(placa));
     }
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid CarEntity entity){
-        return ResponseEntity.status(HttpStatus.CREATED).body("save");
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(entity));
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable @Valid Long id, @RequestBody @Valid CarEntity entity){
+    @PutMapping("/{placa}")
+    public ResponseEntity<?> update(@PathVariable @Valid Long placa, @RequestBody @Valid CarEntity entity){
         return ResponseEntity.status(HttpStatus.OK).body("update");
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable @Valid Long id){
+    @DeleteMapping("/{placa}")
+    public ResponseEntity<?> delete(@PathVariable @Valid String placa){
+        repository.deleteById(placa);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
