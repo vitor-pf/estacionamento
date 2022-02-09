@@ -17,7 +17,7 @@ public class UtilityService implements UtilityInterface {
 
     @Override
     public UtilityEntity findById(String placa) {
-        return repository.findById(placa).get();
+        return null;
     }
 
     @Override
@@ -33,7 +33,6 @@ public class UtilityService implements UtilityInterface {
 
     @Override
     public void delete(String placa) {
-        findById(placa);
-        repository.deleteById(placa);
+
     }
 }

@@ -23,6 +23,7 @@ public class VehicleService implements VehicleInterface {
 
     @Override
     public VehicleEntity save(VehicleEntity entity) {
+
         return repository.save(entity);
     }
 
@@ -36,5 +37,10 @@ public class VehicleService implements VehicleInterface {
     public void delete(String placa) {
         findById(placa);
         repository.deleteById(placa);
+    }
+
+    public void calcularValor(VehicleEntity vehicle, Double valorHora ) {
+
+
     }
 }

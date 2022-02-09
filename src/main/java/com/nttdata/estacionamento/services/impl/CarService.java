@@ -18,7 +18,7 @@ public class CarService implements CarInterface {
 
     @Override
     public CarEntity findById(String placa) {
-        return repository.findById(placa).get();
+        return null;
     }
 
     @Override
@@ -34,7 +34,6 @@ public class CarService implements CarInterface {
 
     @Override
     public void delete(String placa) {
-        findById(placa);
-        repository.deleteById(placa);
+
     }
 }
