@@ -18,7 +18,7 @@ public class MotorcycleService implements MotorcycleInterface {
 
     @Override
     public MotorcycleEntity findById(String placa) {
-        return repository.findById(placa).get();
+        return null;
     }
 
     @Override
@@ -34,7 +34,6 @@ public class MotorcycleService implements MotorcycleInterface {
 
     @Override
     public void delete(String placa) {
-        findById(placa);
-        repository.deleteById(placa);
+
     }
 }

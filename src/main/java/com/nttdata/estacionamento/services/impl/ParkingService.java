@@ -1,5 +1,6 @@
 package com.nttdata.estacionamento.services.impl;
 import com.nttdata.estacionamento.entities.ParkingEntity;
+import com.nttdata.estacionamento.entities.VehicleEntity;
 import com.nttdata.estacionamento.repositories.ParkingRepository;
 import com.nttdata.estacionamento.services.ParkingInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,15 @@ public class ParkingService implements ParkingInterface {
     public void delete(Long id) {
         findById(id);
         repository.deleteById(id);
+    }
+
+    public void darEntrada(Long id, VehicleEntity vehicleEntity){
+
+    }
+    public void darSaida(Long id, VehicleEntity vehicleEntity){
+
+    }
+    public VehicleEntity procurar(Long id, String placa){
+        return null;
     }
 }

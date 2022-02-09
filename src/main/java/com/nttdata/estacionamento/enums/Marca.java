@@ -1,7 +1,7 @@
 package com.nttdata.estacionamento.enums;
 
 public enum Marca {
-    MOTO(1), CARRO(2), UTILITARIO(3);
+    FIAT(1), FORD(2), HONDA(3);
     private Integer type;
 
     Marca(int i) {
