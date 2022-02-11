@@ -1,46 +1,24 @@
 package com.nttdata.estacionamento.services.impl;
 import com.nttdata.estacionamento.entities.VehicleEntity;
-import com.nttdata.estacionamento.repositories.VehicleRepository;
-import com.nttdata.estacionamento.services.VehicleInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.Locale;
+
 @Service
-public class VehicleService implements VehicleInterface {
-    @Autowired
-    VehicleRepository repository;
+public class VehicleService {
 
-    @Override
-    public List<VehicleEntity> findAll() {
-        return repository.findAll();
+    public Double calcularValor(VehicleEntity vehicle, Double valorHora ) {
+        LocalTime entrada = LocalTime.parse(vehicle.getHoraEntrada());
+        LocalTime saida = LocalTime.parse(vehicle.getHoraSaida());
+
+        double res = Math.ceil( Double.valueOf(Duration.between(entrada,saida).toMinutes())/60 );
+
+        return res*vehicle.getFatorEstacionamento().getType()*valorHora;
     }
 
-    @Override
-    public VehicleEntity findById(String placa) {
-        return repository.findById(placa).get();
-    }
-
-    @Override
-    public VehicleEntity save(VehicleEntity entity) {
-
-        return repository.save(entity);
-    }
-
-    @Override
-    public VehicleEntity update(String placa, VehicleEntity entity) {
-        findById(placa);
-        return repository.save(entity);
-    }
-
-    @Override
-    public void delete(String placa) {
-        findById(placa);
-        repository.deleteById(placa);
-    }
-
-    public void calcularValor(VehicleEntity vehicle, Double valorHora ) {
-
-
-    }
 }

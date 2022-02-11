@@ -1,4 +1,5 @@
 package com.nttdata.estacionamento.controllers;
+import com.nttdata.estacionamento.entities.MotorcycleEntity;
 import com.nttdata.estacionamento.entities.UtilityEntity;
 import com.nttdata.estacionamento.repositories.CarRepository;
 import com.nttdata.estacionamento.repositories.UtilityRepository;
@@ -14,27 +15,19 @@ import java.util.List;
 @RequestMapping(value = "/utilitarios")
 public class UtilityController {
     @Autowired
-    UtilityInterface utilityInterface;
+    UtilityInterface utility;
 
     @GetMapping
     public ResponseEntity<List<UtilityEntity>> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(utilityInterface.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(utility.findAll());
     }
-    @GetMapping("/{placa}")
-    public ResponseEntity<UtilityEntity> findById(@PathVariable @Valid String placa){
-        return ResponseEntity.status(HttpStatus.OK).body(utilityInterface.findById(placa));
+    @GetMapping("/{id}")
+    public ResponseEntity<UtilityEntity> findById(@PathVariable @Valid Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(utility.findById(id));
     }
-    @PostMapping
-    public ResponseEntity<UtilityEntity> save(@RequestBody @Valid UtilityEntity entity){
-        return ResponseEntity.status(HttpStatus.CREATED).body(utilityInterface.save(entity));
-    }
-    @PutMapping("/{placa}")
-    public ResponseEntity<UtilityEntity> update(@PathVariable @Valid String placa, @RequestBody @Valid UtilityEntity entity){
-        return ResponseEntity.status(HttpStatus.OK).body(utilityInterface.update(placa, entity));
-    }
-    @DeleteMapping("/{placa}")
-    public ResponseEntity delete(@PathVariable @Valid String placa){
-        utilityInterface.delete(placa);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable @Valid Long id){
+        utility.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,5 +1,6 @@
 package com.nttdata.estacionamento.controllers;
 import com.nttdata.estacionamento.entities.ParkingEntity;
+import com.nttdata.estacionamento.entities.VehicleEntity;
 import com.nttdata.estacionamento.repositories.CarRepository;
 import com.nttdata.estacionamento.repositories.ParkingRepository;
 import com.nttdata.estacionamento.services.ParkingInterface;
@@ -36,5 +37,20 @@ public class ParkingController {
     public ResponseEntity delete(@PathVariable @Valid Long id){
         parkingInterface.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+
+    @PostMapping("/darEntrada/{id}")
+    public ResponseEntity<VehicleEntity> darEntrada(@PathVariable @Valid Long id, @RequestBody @Valid VehicleEntity vehicleEntity){
+        return ResponseEntity.status(HttpStatus.CREATED).body(parkingInterface.darEntrada(id, vehicleEntity));
+    }
+    @PostMapping("/darSaida/{id}/{id_vehicle}")
+    public ResponseEntity<VehicleEntity> darSaida(@PathVariable @Valid Long id, @PathVariable @Valid Long id_vehicle, @RequestBody @Valid VehicleEntity vehicleEntity){
+        return ResponseEntity.status(HttpStatus.CREATED).body(parkingInterface.darSaida(id, id_vehicle, vehicleEntity));
+    }
+    @GetMapping("/procurar/{id}/{placa}")
+    public ResponseEntity procurar(@PathVariable @Valid Long id, @PathVariable @Valid String placa){
+        return ResponseEntity.status(HttpStatus.OK).body(parkingInterface.procurar(id, placa));
     }
 }

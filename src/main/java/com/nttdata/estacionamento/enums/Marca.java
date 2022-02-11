@@ -2,13 +2,13 @@ package com.nttdata.estacionamento.enums;
 
 public enum Marca {
     FIAT(1), FORD(2), HONDA(3);
-    private Integer type;
+    private int type;
 
-    Marca(int i) {
+    private Marca(int i) {
         this.type = i;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 

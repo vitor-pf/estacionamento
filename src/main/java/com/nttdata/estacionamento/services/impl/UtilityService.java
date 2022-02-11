@@ -1,12 +1,19 @@
 package com.nttdata.estacionamento.services.impl;
+import com.nttdata.estacionamento.entities.CarEntity;
+import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.UtilityEntity;
+import com.nttdata.estacionamento.entities.VehicleEntity;
 import com.nttdata.estacionamento.repositories.UtilityRepository;
 import com.nttdata.estacionamento.services.UtilityInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 @Service
-public class UtilityService implements UtilityInterface {
+public class UtilityService implements UtilityInterface{
     @Autowired
     UtilityRepository repository;
 
@@ -16,23 +23,35 @@ public class UtilityService implements UtilityInterface {
     }
 
     @Override
-    public UtilityEntity findById(String placa) {
-        return null;
+    public UtilityEntity findById(Long id) {
+        return repository.findById(id).get();
     }
 
     @Override
-    public UtilityEntity save(UtilityEntity entity) {
-        return repository.save(entity);
+    public void delete(Long id) {
+        findById(id);
+        repository.deleteById(id);
     }
 
-    @Override
-    public UtilityEntity update(String placa, UtilityEntity entity) {
-        findById(placa);
-        return repository.save(entity);
+    public VehicleEntity save(ParkingEntity parking, VehicleEntity vehicle) {
+        UtilityEntity obj = new UtilityEntity();
+
+        obj.setPlaca(vehicle.getPlaca());
+        obj.setMarca(vehicle.getMarca());
+        obj.setModelo(vehicle.getModelo());
+        obj.setFatorEstacionamento(vehicle.getFatorEstacionamento());
+        obj.setParking(parking);
+
+        obj.setHoraEntrada(vehicle.getHoraEntrada());
+        //String entrada = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        //obj.setHoraEntrada(entrada);
+        return repository.save(obj);
     }
+    public VehicleEntity update(Long id, VehicleEntity entity) {
+        UtilityEntity obj = repository.findById(id).get();
 
-    @Override
-    public void delete(String placa) {
-
+        obj.setHoraSaida(entity.getHoraSaida());
+        obj.setTotalEstacionamento(entity.getTotalEstacionamento());
+        return repository.save(obj);
     }
 }
