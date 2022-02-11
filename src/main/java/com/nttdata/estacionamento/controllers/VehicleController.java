@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/veiculos")
 public class VehicleController {
@@ -16,23 +18,8 @@ public class VehicleController {
     VehicleRepository repository;
 
     @GetMapping
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<List<VehicleEntity>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
     }
-    @GetMapping("/{marca}")
-    public ResponseEntity<?> findById(@PathVariable @Valid Marca marca){
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findByMarca(marca));
-    }
-    @PostMapping
-    public ResponseEntity<?> save(@RequestBody @Valid VehicleEntity entity){
-        return ResponseEntity.status(HttpStatus.CREATED).body("save");
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable @Valid Long id, @RequestBody @Valid VehicleEntity entity){
-        return ResponseEntity.status(HttpStatus.OK).body("update");
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable @Valid Long id){
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+
 }

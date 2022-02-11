@@ -11,19 +11,8 @@ public interface UtilityInterface {
 
     List<UtilityEntity> findAll();
 
-    UtilityEntity findById(@PathVariable @Valid String placa);
+    UtilityEntity findById(@PathVariable @Valid Long id);
 
-    UtilityEntity save(@RequestBody @Valid UtilityEntity entity);
-
-    UtilityEntity update(@PathVariable @Valid String placa, @RequestBody @Valid UtilityEntity entity);
-
-    void delete(@PathVariable @Valid String placa);
-
-
-
-
-
-
-
+    void delete(@PathVariable @Valid Long id);
 
 }

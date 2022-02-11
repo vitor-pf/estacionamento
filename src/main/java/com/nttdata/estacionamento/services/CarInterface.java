@@ -11,12 +11,8 @@ public interface CarInterface {
 
     List<CarEntity> findAll();
 
-    CarEntity findById(@PathVariable @Valid String placa);
+    CarEntity findById(@PathVariable @Valid Long id);
 
-    CarEntity save(@RequestBody @Valid CarEntity entity);
-
-    CarEntity update(@PathVariable @Valid String placa, @RequestBody @Valid CarEntity entity);
-
-    void delete(@PathVariable @Valid String placa);
+    void delete(@PathVariable @Valid Long id);
 
 }

@@ -14,27 +14,19 @@ import java.util.List;
 @RequestMapping(value = "/carros")
 public class CarController {
     @Autowired
-    CarInterface carInterface;
+    CarInterface car;
 
     @GetMapping
     public ResponseEntity<List<CarEntity>> findAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(carInterface.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(car.findAll());
     }
-    @GetMapping("/{placa}")
-    public ResponseEntity<CarEntity> findById(@PathVariable @Valid String placa){
-        return ResponseEntity.status(HttpStatus.OK).body(carInterface.findById(placa));
+    @GetMapping("/{id}")
+    public ResponseEntity<CarEntity> findById(@PathVariable @Valid Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(car.findById(id));
     }
-    @PostMapping
-    public ResponseEntity<CarEntity> save(@RequestBody @Valid CarEntity entity){
-        return ResponseEntity.status(HttpStatus.CREATED).body(carInterface.save(entity));
-    }
-    @PutMapping("/{placa}")
-    public ResponseEntity<CarEntity> update(@PathVariable @Valid String placa, @RequestBody @Valid CarEntity entity){
-        return ResponseEntity.status(HttpStatus.OK).body(carInterface.update(placa, entity));
-    }
-    @DeleteMapping("/{placa}")
-    public ResponseEntity delete(@PathVariable @Valid String placa){
-        carInterface.delete(placa);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable @Valid Long id){
+        car.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

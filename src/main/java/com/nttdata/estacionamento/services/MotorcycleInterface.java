@@ -11,20 +11,8 @@ public interface MotorcycleInterface {
 
     List<MotorcycleEntity> findAll();
 
-    MotorcycleEntity findById(@PathVariable @Valid String placa);
+    MotorcycleEntity findById(@PathVariable @Valid Long id);
 
-    MotorcycleEntity save(@RequestBody @Valid MotorcycleEntity entity);
-
-    MotorcycleEntity update(@PathVariable @Valid String placa, @RequestBody @Valid MotorcycleEntity entity);
-
-    void delete(@PathVariable @Valid String placa);
-
-
-
-
-
-
-
-
+    void delete(@PathVariable @Valid Long id);
 
 }
