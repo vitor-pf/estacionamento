@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
@@ -23,13 +24,14 @@ public class ParkingEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Min(value = 1L, message = "O valor deve ser > R$ 1,00!")
     private Double valorHora;
 
-    private Double totalFaturamento;
-    private Double totalFaturamentoCarro;
-    private Double totalFaturamentoMoto;
-    private Double totalFaturamentoUtilitario;
+    private Double totalFaturamento = 0.0;
+    private Double totalFaturamentoCarro = 0.0;
+    private Double totalFaturamentoMoto = 0.0;
+    private Double totalFaturamentoUtilitario = 0.0;
 
 
     @OneToMany(mappedBy = "parking")

@@ -1,4 +1,7 @@
 package com.nttdata.estacionamento.controllers;
+import com.nttdata.estacionamento.dtos.ParkingEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.VehicleEntity;
 import com.nttdata.estacionamento.repositories.CarRepository;
@@ -26,11 +29,11 @@ public class ParkingController {
         return ResponseEntity.status(HttpStatus.OK).body(parkingInterface.findById(id));
     }
     @PostMapping
-    public ResponseEntity<ParkingEntity> save(@RequestBody @Valid ParkingEntity entity){
+    public ResponseEntity<ParkingEntity> save(@RequestBody @Valid ParkingEntityDTO entity){
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingInterface.save(entity));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ParkingEntity> update(@PathVariable @Valid Long id, @RequestBody @Valid ParkingEntity entity){
+    public ResponseEntity<ParkingEntity> update(@PathVariable @Valid Long id, @RequestBody @Valid ParkingEntityDTO entity){
         return ResponseEntity.status(HttpStatus.OK).body(parkingInterface.update(id,entity));
     }
     @DeleteMapping("/{id}")
@@ -42,11 +45,11 @@ public class ParkingController {
 
 
     @PostMapping("/darEntrada/{id}")
-    public ResponseEntity<VehicleEntity> darEntrada(@PathVariable @Valid Long id, @RequestBody @Valid VehicleEntity vehicleEntity){
+    public ResponseEntity<VehicleEntity> darEntrada(@PathVariable @Valid Long id, @RequestBody @Valid VehicleEntityDTO vehicleEntity){
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingInterface.darEntrada(id, vehicleEntity));
     }
-    @PostMapping("/darSaida/{id}/{id_vehicle}")
-    public ResponseEntity<VehicleEntity> darSaida(@PathVariable @Valid Long id, @PathVariable @Valid Long id_vehicle, @RequestBody @Valid VehicleEntity vehicleEntity){
+    @PutMapping("/darSaida/{id}/{id_vehicle}")
+    public ResponseEntity<VehicleEntity> darSaida(@PathVariable @Valid Long id, @PathVariable @Valid Long id_vehicle, @RequestBody @Valid VehicleEntityExitDTO vehicleEntity){
         return ResponseEntity.status(HttpStatus.CREATED).body(parkingInterface.darSaida(id, id_vehicle, vehicleEntity));
     }
     @GetMapping("/procurar/{id}/{placa}")

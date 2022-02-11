@@ -1,8 +1,12 @@
 package com.nttdata.estacionamento.services.impl;
+import com.nttdata.estacionamento.dtos.ParkingEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.*;
 import com.nttdata.estacionamento.enums.FatorEstaciomento;
 import com.nttdata.estacionamento.repositories.ParkingRepository;
 import com.nttdata.estacionamento.services.ParkingInterface;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +26,15 @@ public class ParkingService implements ParkingInterface {
     @Autowired
     UtilityService utility;
 
+    @Autowired
+    ModelMapper modelMapper;
+    private ParkingEntity toParkingEntity(ParkingEntityDTO dto) {
+        return modelMapper.map(dto, ParkingEntity.class);
+    }
+    private VehicleEntity toVehicleEntity(VehicleEntityExitDTO dto) {
+        return modelMapper.map(dto, VehicleEntity.class);
+    }
+
 
     @Override
     public List<ParkingEntity> findAll() {
@@ -32,14 +45,15 @@ public class ParkingService implements ParkingInterface {
         return repository.findById(id).get();
     }
     @Override
-    public ParkingEntity save(ParkingEntity entity) {
-        return repository.save(entity);
+    public ParkingEntity save(ParkingEntityDTO entity) {
+        return repository.save(toParkingEntity(entity));
     }
     @Override
-    public ParkingEntity update(Long id, ParkingEntity entity) {
+    public ParkingEntity update(Long id, ParkingEntityDTO entity) {
         findById(id);
-        entity.setId(id);
-        return repository.save(entity);
+        ParkingEntity obj = toParkingEntity(entity);
+        obj.setId(id);
+        return repository.save(obj);
     }
     @Override
     public void delete(Long id) {
@@ -47,11 +61,7 @@ public class ParkingService implements ParkingInterface {
         repository.deleteById(id);
     }
 
-
-
-
-
-    public VehicleEntity darEntrada(Long id, VehicleEntity vehicleEntity){
+    public VehicleEntity darEntrada(Long id, VehicleEntityDTO vehicleEntity){
         ParkingEntity parking = findById(id);
         for (VehicleEntity obj : parking.getVehicles()){
             if(obj.getPlaca().equals(vehicleEntity.getPlaca()) && obj.getHoraSaida() == null)
@@ -69,14 +79,21 @@ public class ParkingService implements ParkingInterface {
         }
         return null;
     }
-    public VehicleEntity darSaida(Long id, Long id_vehicle,VehicleEntity vehicle){
+
+
+
+    public VehicleEntity darSaida(Long id, Long id_vehicle, VehicleEntityExitDTO vehicle){
         ParkingEntity parking = findById(id);
-        for (VehicleEntity obj : parking.getVehicles()){
-            if(obj.getId().equals(id_vehicle) && obj.getHoraSaida() != null)
-                throw new IllegalArgumentException("Carro com saida");
-        }
+        VehicleEntity obj = toVehicleEntity(vehicle);
         String saida = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
         //vehicle.setHoraSaida(saida);
+
+
+        for (VehicleEntity result : parking.getVehicles()){
+            if(result.getId().equals(id_vehicle) && result.getHoraSaida() != null)
+                throw new IllegalArgumentException("Carro com saida");
+        }
+
         vehicle.setTotalEstacionamento(
                 vehicleService.calcularValor(vehicle, parking.getValorHora())
         );
@@ -84,19 +101,19 @@ public class ParkingService implements ParkingInterface {
             parking.setTotalFaturamentoCarro(
                     parking.getTotalFaturamentoCarro()+vehicle.getTotalEstacionamento()
             );
-            vehicle = car.update(id_vehicle, vehicle);
+            obj = car.update(id_vehicle, vehicle);
         }
         else if(vehicle.getFatorEstacionamento().equals(FatorEstaciomento.MOTO)){
             parking.setTotalFaturamentoMoto(
                     parking.getTotalFaturamentoMoto()+vehicle.getTotalEstacionamento()
             );
-            vehicle = motorcycle.update(id_vehicle, vehicle);
+            obj = motorcycle.update(id_vehicle, vehicle);
         }
         else if(vehicle.getFatorEstacionamento().equals(FatorEstaciomento.UTILITARIO)){
             parking.setTotalFaturamentoUtilitario(
                     parking.getTotalFaturamentoUtilitario()+vehicle.getTotalEstacionamento()
             );
-            vehicle = utility.update(id_vehicle, vehicle);
+            obj = utility.update(id_vehicle, vehicle);
         }
         parking.setTotalFaturamento(
                 parking.getTotalFaturamentoMoto()+
@@ -104,8 +121,9 @@ public class ParkingService implements ParkingInterface {
                         parking.getTotalFaturamentoUtilitario()
         );
         repository.save(parking);
-        return vehicle;
+        return obj;
     }
+
     public VehicleEntity procurar(Long id, String placa){
         ParkingEntity parking = repository.findById(id).get();
         for (VehicleEntity vehicle : parking.getVehicles()) {

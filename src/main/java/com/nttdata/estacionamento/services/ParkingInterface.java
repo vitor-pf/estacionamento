@@ -1,5 +1,8 @@
 package com.nttdata.estacionamento.services;
 
+import com.nttdata.estacionamento.dtos.ParkingEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.VehicleEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,15 +17,15 @@ public interface ParkingInterface {
 
     ParkingEntity findById(Long id);
 
-    ParkingEntity save(ParkingEntity entity);
+    ParkingEntity save(ParkingEntityDTO entity);
 
-    ParkingEntity update(Long id, ParkingEntity entity);
+    ParkingEntity update(Long id, ParkingEntityDTO entity);
 
     void delete(Long id);
 
-    VehicleEntity darEntrada(Long id, VehicleEntity vehicleEntity);
+    VehicleEntity darEntrada(Long id, VehicleEntityDTO vehicleEntity);
 
-    VehicleEntity darSaida(Long id, Long id_vehicle,VehicleEntity vehicleEntity);
+    VehicleEntity darSaida(Long id, Long id_vehicle, VehicleEntityExitDTO vehicleEntity);
 
     VehicleEntity procurar(Long id, String placa);
 
