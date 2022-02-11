@@ -1,10 +1,13 @@
 package com.nttdata.estacionamento.services.impl;
+import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.CarEntity;
 import com.nttdata.estacionamento.entities.MotorcycleEntity;
 import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.VehicleEntity;
 import com.nttdata.estacionamento.repositories.MotorcycleRepository;
 import com.nttdata.estacionamento.services.MotorcycleInterface;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,11 @@ public class MotorcycleService implements MotorcycleInterface {
     @Autowired
     MotorcycleRepository repository;
 
+    @Autowired
+    ModelMapper modelMapper;
+    private MotorcycleEntity toMotorcycleEntity(VehicleEntityDTO dto) {
+        return modelMapper.map(dto, MotorcycleEntity.class);
+    }
 
     @Override
     public List<MotorcycleEntity> findAll() {
@@ -34,22 +42,16 @@ public class MotorcycleService implements MotorcycleInterface {
         repository.deleteById(id);
     }
 
-    public VehicleEntity save(ParkingEntity parking, VehicleEntity vehicle) {
-        MotorcycleEntity obj = new MotorcycleEntity();
-
-        obj.setPlaca(vehicle.getPlaca());
-        obj.setMarca(vehicle.getMarca());
-        obj.setModelo(vehicle.getModelo());
-        obj.setFatorEstacionamento(vehicle.getFatorEstacionamento());
+    public VehicleEntity save(ParkingEntity parking, VehicleEntityDTO vehicle) {
+        MotorcycleEntity obj = toMotorcycleEntity(vehicle);
         obj.setParking(parking);
-
-        obj.setHoraEntrada(vehicle.getHoraEntrada());
         //String entrada = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
         //obj.setHoraEntrada(entrada);
+
         return repository.save(obj);
     }
 
-    public VehicleEntity update(Long id, VehicleEntity entity) {
+    public VehicleEntity update(Long id, VehicleEntityExitDTO entity) {
         MotorcycleEntity obj = repository.findById(id).get();
 
         obj.setHoraSaida(entity.getHoraSaida());

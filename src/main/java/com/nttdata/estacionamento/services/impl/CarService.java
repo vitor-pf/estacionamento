@@ -1,9 +1,12 @@
 package com.nttdata.estacionamento.services.impl;
+import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
+import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.CarEntity;
 import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.VehicleEntity;
 import com.nttdata.estacionamento.repositories.CarRepository;
 import com.nttdata.estacionamento.services.CarInterface;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,13 @@ import java.util.stream.Collectors;
 public class CarService implements CarInterface{
     @Autowired
     CarRepository repository;
+
+    @Autowired
+    ModelMapper modelMapper;
+    private CarEntity toVehicleEntity(VehicleEntityDTO dto) {
+        return modelMapper.map(dto, CarEntity.class);
+    }
+
 
     @Override
     public List<CarEntity> findAll() {
@@ -35,25 +45,16 @@ public class CarService implements CarInterface{
         repository.deleteById(id);
     }
 
-
-
-
-    public VehicleEntity save(ParkingEntity parking, VehicleEntity vehicle) {
-        CarEntity obj = new CarEntity();
-
-        obj.setPlaca(vehicle.getPlaca());
-        obj.setMarca(vehicle.getMarca());
-        obj.setModelo(vehicle.getModelo());
-        obj.setFatorEstacionamento(vehicle.getFatorEstacionamento());
+    public VehicleEntity save(ParkingEntity parking, VehicleEntityDTO vehicle) {
+        CarEntity obj = toVehicleEntity(vehicle);
         obj.setParking(parking);
-
-        obj.setHoraEntrada(vehicle.getHoraEntrada());
         //String entrada = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
         //obj.setHoraEntrada(entrada);
+
         return repository.save(obj);
     }
 
-    public VehicleEntity update(Long id_vehicle, VehicleEntity vehicle) {
+    public VehicleEntity update(Long id_vehicle, VehicleEntityExitDTO vehicle) {
         CarEntity obj = repository.findById(id_vehicle).get();
         
         obj.setHoraSaida(vehicle.getHoraSaida());

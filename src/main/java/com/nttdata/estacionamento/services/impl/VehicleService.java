@@ -1,4 +1,5 @@
 package com.nttdata.estacionamento.services.impl;
+import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.VehicleEntity;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.Locale;
 @Service
 public class VehicleService {
 
-    public Double calcularValor(VehicleEntity vehicle, Double valorHora ) {
+    public Double calcularValor(VehicleEntityExitDTO vehicle, Double valorHora ) {
         LocalTime entrada = LocalTime.parse(vehicle.getHoraEntrada());
         LocalTime saida = LocalTime.parse(vehicle.getHoraSaida());
 
