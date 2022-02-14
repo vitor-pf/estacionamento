@@ -4,6 +4,8 @@ import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
 import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.*;
 import com.nttdata.estacionamento.enums.FatorEstaciomento;
+import com.nttdata.estacionamento.exceptions.ProcessException;
+import com.nttdata.estacionamento.exceptions.NotFoundException;
 import com.nttdata.estacionamento.repositories.ParkingRepository;
 import com.nttdata.estacionamento.services.ParkingInterface;
 import org.modelmapper.ModelMapper;
@@ -42,7 +44,7 @@ public class ParkingService implements ParkingInterface {
     }
     @Override
     public ParkingEntity findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(()-> new NotFoundException("Id não encontrado!"));
     }
     @Override
     public ParkingEntity save(ParkingEntityDTO entity) {
@@ -65,7 +67,7 @@ public class ParkingService implements ParkingInterface {
         ParkingEntity parking = findById(id);
         for (VehicleEntity obj : parking.getVehicles()){
             if(obj.getPlaca().equals(vehicleEntity.getPlaca()) && obj.getHoraSaida() == null)
-                throw new IllegalArgumentException("Carro consta no sistema");
+                throw new ProcessException("Carro consta no sistema");
         }
 
         if(vehicleEntity.getFatorEstacionamento().equals(FatorEstaciomento.CARRO)){
@@ -91,7 +93,7 @@ public class ParkingService implements ParkingInterface {
 
         for (VehicleEntity result : parking.getVehicles()){
             if(result.getId().equals(id_vehicle) && result.getHoraSaida() != null)
-                throw new IllegalArgumentException("Carro com saida");
+                throw new ProcessException("Carro com saida");
         }
 
         vehicle.setTotalEstacionamento(
@@ -130,6 +132,6 @@ public class ParkingService implements ParkingInterface {
             if (vehicle.getPlaca().equals(placa) && vehicle.getHoraSaida() == null)
                 return vehicle;
         }
-        throw new IllegalArgumentException("Carro não encontado");
+        throw new NotFoundException("Carro não encontado");
     }
 }

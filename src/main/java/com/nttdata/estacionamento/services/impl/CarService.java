@@ -4,6 +4,7 @@ import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.CarEntity;
 import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.VehicleEntity;
+import com.nttdata.estacionamento.exceptions.NotFoundException;
 import com.nttdata.estacionamento.repositories.CarRepository;
 import com.nttdata.estacionamento.services.CarInterface;
 import org.modelmapper.ModelMapper;
@@ -36,7 +37,7 @@ public class CarService implements CarInterface{
 
     @Override
     public CarEntity findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(()-> new NotFoundException("Id não encontrado!"));
     }
 
     @Override
@@ -54,8 +55,8 @@ public class CarService implements CarInterface{
         return repository.save(obj);
     }
 
-    public VehicleEntity update(Long id_vehicle, VehicleEntityExitDTO vehicle) {
-        CarEntity obj = repository.findById(id_vehicle).get();
+    public VehicleEntity update(Long id, VehicleEntityExitDTO vehicle) {
+        CarEntity obj = findById(id);
         
         obj.setHoraSaida(vehicle.getHoraSaida());
         obj.setTotalEstacionamento(vehicle.getTotalEstacionamento());
