@@ -5,6 +5,7 @@ import com.nttdata.estacionamento.entities.CarEntity;
 import com.nttdata.estacionamento.entities.MotorcycleEntity;
 import com.nttdata.estacionamento.entities.ParkingEntity;
 import com.nttdata.estacionamento.entities.VehicleEntity;
+import com.nttdata.estacionamento.exceptions.NotFoundException;
 import com.nttdata.estacionamento.repositories.MotorcycleRepository;
 import com.nttdata.estacionamento.services.MotorcycleInterface;
 import org.modelmapper.ModelMapper;
@@ -33,7 +34,7 @@ public class MotorcycleService implements MotorcycleInterface {
 
     @Override
     public MotorcycleEntity findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(()-> new NotFoundException("Id não encontrado!"));
     }
 
     @Override
@@ -52,7 +53,7 @@ public class MotorcycleService implements MotorcycleInterface {
     }
 
     public VehicleEntity update(Long id, VehicleEntityExitDTO entity) {
-        MotorcycleEntity obj = repository.findById(id).get();
+        MotorcycleEntity obj = findById(id);
 
         obj.setHoraSaida(entity.getHoraSaida());
         obj.setTotalEstacionamento(entity.getTotalEstacionamento());

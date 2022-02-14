@@ -2,6 +2,7 @@ package com.nttdata.estacionamento.services.impl;
 import com.nttdata.estacionamento.dtos.VehicleEntityDTO;
 import com.nttdata.estacionamento.dtos.VehicleEntityExitDTO;
 import com.nttdata.estacionamento.entities.*;
+import com.nttdata.estacionamento.exceptions.NotFoundException;
 import com.nttdata.estacionamento.repositories.UtilityRepository;
 import com.nttdata.estacionamento.services.UtilityInterface;
 import org.modelmapper.ModelMapper;
@@ -30,7 +31,7 @@ public class UtilityService implements UtilityInterface{
 
     @Override
     public UtilityEntity findById(Long id) {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow(()-> new NotFoundException("Id não encontrado!"));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class UtilityService implements UtilityInterface{
     }
 
     public VehicleEntity update(Long id, VehicleEntityExitDTO entity) {
-        UtilityEntity obj = repository.findById(id).get();
+        UtilityEntity obj = findById(id);
 
         obj.setHoraSaida(entity.getHoraSaida());
         obj.setTotalEstacionamento(entity.getTotalEstacionamento());
